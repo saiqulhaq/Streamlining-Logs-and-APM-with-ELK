@@ -38,5 +38,15 @@ module Hello
     origins = ENV.fetch("ACTION_CABLE_ALLOWED_REQUEST_ORIGINS") { "http:\/\/localhost*" }.split(",")
     origins.map! { |url| /#{url}/ }
     config.action_cable.allowed_request_origins = origins
+
+    config.lograge.enabled = true
+    config.lograge.formatter = Lograge::Formatters::Logstash.new
+    config.lograge.logger = ActiveSupport::Logger.new "#{Rails.root}/log/lograge_#{Rails.env}.log"
+    config.lograge.custom_options = lambda do |event|
+      exceptions = %w(controller action format id)
+      {
+        params: event.payload[:params].except(*exceptions)
+      }
+    end
   end
 end
