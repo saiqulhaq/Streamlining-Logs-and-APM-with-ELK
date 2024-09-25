@@ -45,8 +45,31 @@ module Hello
     config.lograge.custom_options = lambda do |event|
       exceptions = %w(controller action format id)
       {
+        level: event.payload[:level],
+        request_id: event.payload[:request_id],
+        ip: event.payload[:ip],
         params: event.payload[:params].except(*exceptions)
       }
+    end
+
+    config.lograge.custom_payload do |controller|
+      {
+        level: ::Hello::Application.log_level_to_string(controller.logger.level),
+        request_id: controller.request.request_id,
+        ip: controller.request.remote_ip
+      }
+    end
+
+    def self.log_level_to_string(level)
+      case level
+      when 0 then 'debug'
+      when 1 then 'info'
+      when 2 then 'warn'
+      when 3 then 'error'
+      when 4 then 'fatal'
+      when 5 then 'unknown'
+      else 'unknown'
+      end
     end
   end
 end
