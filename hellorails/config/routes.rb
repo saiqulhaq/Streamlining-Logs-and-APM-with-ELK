@@ -1,4 +1,9 @@
 Rails.application.routes.draw do
+  namespace :admin do
+    resources :products
+
+    root to: "products#index"
+  end
   root to: "pages#home"
 
   get "/up/", to: "up#index", as: :up

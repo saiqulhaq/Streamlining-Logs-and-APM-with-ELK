@@ -1,6 +1,7 @@
 require_relative "boot"
 
 require "rails/all"
+require_relative '../app/middleware/request_id_setter'
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -39,26 +40,7 @@ module Hello
     origins.map! { |url| /#{url}/ }
     config.action_cable.allowed_request_origins = origins
 
-    config.lograge.enabled = true
-    config.lograge.formatter = Lograge::Formatters::Logstash.new
-    config.lograge.logger = ActiveSupport::Logger.new "#{Rails.root}/log/lograge_#{Rails.env}.log"
-    config.lograge.custom_options = lambda do |event|
-      exceptions = %w(controller action format id)
-      {
-        level: event.payload[:level],
-        request_id: event.payload[:request_id],
-        ip: event.payload[:ip],
-        params: event.payload[:params].except(*exceptions)
-      }
-    end
-
-    config.lograge.custom_payload do |controller|
-      {
-        level: ::Hello::Application.log_level_to_string(controller.logger.level),
-        request_id: controller.request.request_id,
-        ip: controller.request.remote_ip
-      }
-    end
+    config.middleware.insert_after ActionDispatch::RequestId, RequestIdSetter
 
     def self.log_level_to_string(level)
       case level
