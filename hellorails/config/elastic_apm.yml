@@ -1,0 +1,5 @@
+service_name: 'my-service-name'
+secret_token: ''
+server_url: 'http://apm-server:8200'
+environment: 'development'
+log_level: 'debug'
