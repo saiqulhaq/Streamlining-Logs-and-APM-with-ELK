@@ -68,7 +68,9 @@ group :test do
   gem "selenium-webdriver"
 end
 
+gem "administrate"
 gem "lograge"
 gem "logstash-event"
-gem "administrate"
+gem 'logstash-logger'
 gem "pry"
+gem "pry-remote"

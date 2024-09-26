@@ -191,7 +191,7 @@ services:
     volumes:
       - ./logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml
       - ./logstash/pipeline:/usr/share/logstash/pipeline
-      - ./log/lograge_development.log:/var/log/rails/lograge_development.log
+      - ./log/:/var/log/rails/
     ports:
       - 5044:5044
       - 50000:50000/tcp

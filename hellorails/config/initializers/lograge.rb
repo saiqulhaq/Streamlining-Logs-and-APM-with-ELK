@@ -1,7 +1,7 @@
 Rails.application.configure do
   config.lograge.enabled = true
   config.lograge.formatter = Lograge::Formatters::Logstash.new
-  config.lograge.logger = ActiveSupport::Logger.new "#{Rails.root}/log/lograge_#{Rails.env}.log"
+  config.lograge.logger = ActiveSupport::Logger.new "#{Rails.root}/log/application_server.log"
   config.lograge.custom_options = lambda do |event|
     exceptions = %w(controller action format id)
     {
@@ -19,4 +19,5 @@ Rails.application.configure do
       ip: controller.request.remote_ip
     }
   end
+  # config.lograge.keep_original_rails_log = true
 end

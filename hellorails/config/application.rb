@@ -16,12 +16,6 @@ module Hello
     #   https://guides.rubyonrails.org/autoloading_and_reloading_constants.html#config-autoload-lib-ignore.
     config.autoload_lib(ignore: %w[assets tasks])
 
-    # Log to STDOUT because Docker expects all processes to log here. You could
-    # then collect logs using journald, syslog or forward them somewhere else.
-    config.logger = ActiveSupport::Logger.new(STDOUT)
-      .tap  { |logger| logger.formatter = ::Logger::Formatter.new }
-      .then { |logger| ActiveSupport::TaggedLogging.new(logger) }
-
     # Set Redis as the back-end for the cache.
     config.cache_store = :redis_cache_store, {
       url: ENV.fetch("REDIS_URL") { "redis://redis:6379/1" },
@@ -41,6 +35,10 @@ module Hello
     config.action_cable.allowed_request_origins = origins
 
     config.middleware.insert_after ActionDispatch::RequestId, RequestIdSetter
+    config.logger = LogStashLogger.new(
+      type: :file,
+      path: "#{Rails.root}/log/application.log",
+    )
 
     def self.log_level_to_string(level)
       case level
