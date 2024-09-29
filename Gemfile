@@ -69,8 +69,9 @@ group :test do
 end
 
 gem "administrate"
+gem "elastic-apm"
 gem "lograge"
 gem "logstash-event"
-gem 'logstash-logger'
+gem "logstash-logger"
 gem "pry"
 gem "pry-remote"
