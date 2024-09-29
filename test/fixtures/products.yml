@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  request_id: MyString
+  price_cents: 1
+  price_currency: MyString
+
+two:
+  name: MyString
+  request_id: MyString
+  price_cents: 1
+  price_currency: MyString
